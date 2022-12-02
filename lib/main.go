@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	"io/fs"
 	"log"
 	"net/http"
-	"os"
 	"runtime"
 )
 
@@ -16,14 +14,15 @@ func main() {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	var root string = "~/souce/repos/go/"
-	fileSystem := os.DirFS(root)
-	fs.ReadFile(fileSystem, "./pgaes/index.html")
-	w.WriteHeader(200)
-	w.Header().Add("server", runtime.Version())
+	version := runtime.Version()
+	w.WriteHeader(303)
+	w.Header().Add("server", version)
+	fmt.Fprintf(w, "Welcome to the %s api gateway. To continue, please enter a valid URL", version)
 }
 
 func sayHello(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
+	version := runtime.Version()
+	w.Header().Add("server", version)
 	fmt.Fprintf(w, "Hello there, %s!, Welcome to the web.", name)
 }
