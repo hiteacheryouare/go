@@ -1,28 +1,48 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+	"os"
 	"runtime"
 )
 
+const defaultPort = "3000"
+
+type responseData struct {
+	Message string `json:"message"`
+	Code    int    `json:"code"`
+}
+
 func main() {
-	http.HandleFunc("/", index)
-	http.HandleFunc("/hello", sayHello)
-	log.Fatal(http.ListenAndServe(":8080", nil))
-}
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = defaultPort
+	}
 
-func index(w http.ResponseWriter, r *http.Request) {
-	version := runtime.Version()
-	w.WriteHeader(303)
-	w.Header().Add("server", version)
-	fmt.Fprintf(w, "Welcome to the %s api gateway. To continue, please enter a valid URL", version)
-}
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		var code int = 200
+		w.Header().Set("server", runtime.Version())
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(code)
+		data := responseData{
+			Message: "It works!",
+			Code:    code,
+		}
+		jsonData, err := json.Marshal(data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-func sayHello(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	version := runtime.Version()
-	w.Header().Add("server", version)
-	fmt.Fprintf(w, "Hello there, %s!, Welcome to the web.", name)
+		w.Write(jsonData)
+	})
+
+	http.HandleFunc("/endpoint", func(w http.ResponseWriter, r *http.Request) {
+		// call your function that creates the endpoint here
+	})
+
+	fmt.Println("Server is listening at http://localhost:" + port)
+	http.ListenAndServe(":"+port, nil)
 }
