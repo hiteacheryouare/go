@@ -1,4 +1,4 @@
 go version;
-GOOS=js 
-GOARCH=wasm
-go build ./lib/main.go -o ./out/main.wasm;
+SET GOOS=js 
+SET GOARCH=wasm
+go build -o ./out/main.wasm ./lib/main.go;

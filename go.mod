@@ -1,3 +1,4 @@
-module hiteacheryouare/go
+module hiteacheryouare/goWeb
 
 go 1.19
+
