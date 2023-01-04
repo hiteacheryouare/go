@@ -195,7 +195,7 @@ func main() {
 	}
 	simpleJsonResponse("/", "It works!", 200)
 	simpleQueryParamsJsonResponse("/reverse", "Use data", "input", 203)
-	simpleHTMLResponse("/dmv1", dmv1HTML, 205)
+	simpleHTMLResponse("/dmv1", dmv1HTML, 200)
 	redirectNotFound("/goober")
 	fmt.Println("Server is listening at http://localhost:" + port)
 	http.ListenAndServe(":"+port, nil)
