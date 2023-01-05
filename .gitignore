@@ -13,6 +13,7 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+/out/*.wat
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
@@ -21,3 +22,9 @@
 go.work
 
 .env
+
+
+# Custom build scripts
+/scripts/wasm2wat.ps1
+/scripts/wasm2c.ps1
+/scripts/wasm-decompile.ps1
